@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOSSIER // JK-04: K JAYANTH KARTHIKEYA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            tactical: {
+              bg: '#0a0814',
+              surface: '#120f24',
+              panel: '#181432',
+              border: '#6859a4',
+              accent: '#a994ff',
+              bright: '#c7baff',
+              glow: '#9279fe',
+              text: '#e6e1ff',
+              dim: '#7e76a6',
+              alert: '#ff5470',
+              cyan: '#79ffe1'
+            }
+          },
+          fontFamily: {
+            mono: ['"Share Tech Mono"', 'monospace'],
+            pixel: ['"VT323"', 'monospace'],
+            sans: ['"Space Grotesk"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --phosphor: #b5a4ff;
+      --glow-color: rgba(169, 148, 255, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: text;
+    }
+
+    body {
+      background-color: #090714;
+      color: #dfd8ff;
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* CRT scanline & vignette overlay (hidden by default) */
+    .crt-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      background: linear-gradient(
+        rgba(18, 14, 36, 0) 50%, 
+        rgba(0, 0, 0, 0.4) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+      );
+      background-size: 100% 4px, 6px 100%;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.85);
+      transition: opacity 0.3s ease;
+      display: none;
+    }
+
+    .crt-flicker {
+      animation: flicker 0.18s infinite;
+      opacity: 0.94;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.98; }
+      50% { opacity: 0.94; }
+      100% { opacity: 0.99; }
+    }
+
+    /* Dotted tactical grain */
+    .dot-grid {
+      background-image: radial-gradient(rgba(147, 129, 255, 0.18) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    /* Sci-Fi Brackets & Borders */
+    .dossier-frame {
+      border: 1.5px solid #6c5ca7;
+      box-shadow: 0 0 18px rgba(147, 129, 255, 0.15), inset 0 0 14px rgba(104, 89, 164, 0.12);
+      position: relative;
+    }
+
+    .corner-bracket::before,
+    .corner-bracket::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-color: #c7baff;
+      pointer-events: none;
+    }
+
+    .corner-bracket::before {
+      top: -2px; left: -2px;
+      border-top: 2px solid;
+      border-left: 2px solid;
+    }
+
+    .corner-bracket::after {
+      bottom: -2px; right: -2px;
+      border-bottom: 2px solid;
+      border-right: 2px solid;
+    }
+
+    /* Glow text */
+    .glow-purple {
+      text-shadow: 0 0 8px rgba(181, 164, 255, 0.7), 0 0 20px rgba(147, 129, 255, 0.35);
+    }
+
+    .glow-cyan {
+      text-shadow: 0 0 8px rgba(121, 255, 225, 0.7);
+    }
+
+    /* Custom tactical scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f0c20;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #5d4f9b;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a994ff;
+    }
+
+    /* Biometric scan bar: sweeps up and down, fades purple -> green -> purple */
+    .bio-scan-bar {
+      top: 0;
+      background-color: rgba(169, 148, 255, 0.7);
+      box-shadow: 0 0 6px rgba(146, 121, 254, 0.8);
+      animation: bioScan 2.4s ease-in-out infinite;
+    }
+    @keyframes bioScan {
+      0%   { top: 0;                background-color: rgba(169, 148, 255, 0.7); box-shadow: 0 0 6px rgba(146, 121, 254, 0.8); }
+      50%  { top: calc(100% - 4px); background-color: #79ffe1;                  box-shadow: 0 0 14px #79ffe1; }
+      100% { top: 0;                background-color: rgba(169, 148, 255, 0.7); box-shadow: 0 0 6px rgba(146, 121, 254, 0.8); }
+    }
+
+    /* Glitch text effect on hover */
+    .glitch-hover:hover {
+      animation: glitchAnim 0.3s ease-in-out;
+    }
+    @keyframes glitchAnim {
+      0% { transform: translate(0) }
+      20% { transform: translate(-2px, 1px) }
+      40% { transform: translate(2px, -1px) }
+      60% { transform: translate(-1px, 2px) }
+      80% { transform: translate(1px, -1px) }
+      100% { transform: translate(0) }
+    }
+  </style>
+</head>
+<body class="dot-grid min-h-screen relative selection:bg-tactical-accent selection:text-tactical-bg">
+
+  <!-- CRT scanline overlay, disabled by default -->
+  <div id="crtOverlay" class="crt-overlay crt-flicker"></div>
+
+  <!-- Audio Synthesizer Toast Notice -->
+  <div id="toastNotification" class="fixed top-5 right-5 z-50 bg-tactical-panel border border-tactical-accent text-tactical-bright px-4 py-2 text-xs font-mono rounded shadow-lg transform translate-y-[-100px] transition-all duration-300 opacity-0 pointer-events-none flex items-center space-x-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-tactical-cyan animate-pulse"></span>
+    <span id="toastMsg">ACTION LOGGED</span>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-8 relative z-10">
+
+    <!-- Top Header: cleaned, without MIL-SPEC or dossier labels -->
+    <header class="dossier-frame bg-tactical-surface/90 backdrop-blur p-4 rounded-md corner-bracket flex flex-wrap items-center justify-between gap-4 border border-tactical-border">
+      <div class="flex items-center space-x-3">
+        <div class="flex space-x-1.5">
+          <span class="w-3 h-3 rounded-full bg-tactical-alert/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-tactical-accent/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-tactical-cyan/80 inline-block"></span>
+        </div>
+        <div>
+          <h1 class="text-lg md:text-xl font-bold tracking-widest text-tactical-bright glow-purple font-mono">
+            K JAYANTH KARTHIKEYA
+          </h1>
+        </div>
+      </div>
+
+      <!-- Realtime Telemetry: Live IST Time & Controls -->
+      <div class="flex items-center flex-wrap gap-4 text-xs font-mono">
+        <div class="flex items-center space-x-2 bg-tactical-bg/80 px-2.5 py-1.5 rounded border border-tactical-border/60">
+          <span class="w-2 h-2 rounded-full bg-tactical-cyan animate-ping"></span>
+          <span class="text-tactical-cyan font-bold tracking-wider">ONLINE</span>
+          <span class="text-tactical-dim">|</span>
+          <span class="text-tactical-text font-bold" id="liveClock">--:--:-- IST</span>
+        </div>
+
+        <!-- Battery / Signal Telemetry -->
+        <div class="flex items-center space-x-2 text-tactical-dim border border-tactical-border/50 px-2.5 py-1.5 rounded bg-tactical-bg/50">
+          <svg class="w-4 h-4 text-tactical-bright" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="16" height="10" rx="2" ry="2" stroke-width="2"></rect>
+            <line x1="20" y1="11" x2="20" y2="13" stroke-width="2" stroke-linecap="round"></line>
+            <rect x="4" y="9" width="10" height="6" fill="#a994ff"></rect>
+          </svg>
+          <span class="text-tactical-bright font-bold">100% PWR</span>
+        </div>
+
+        <!-- FX Toggles -->
+        <div class="flex items-center space-x-2">
+          <button id="toggleAudioBtn" class="px-2.5 py-1.5 bg-tactical-panel hover:bg-tactical-accent hover:text-tactical-bg border border-tactical-border rounded text-tactical-bright transition font-mono flex items-center space-x-1" title="Toggle Tactical Audio Feedback">
+            <span id="audioIcon">🔊</span>
+            <span class="text-[11px]" id="audioLabel">AUDIO: ON</span>
+          </button>
+          <button id="toggleCrtBtn" class="px-2.5 py-1.5 bg-tactical-panel hover:bg-tactical-accent hover:text-tactical-bg border border-tactical-border rounded text-tactical-bright transition font-mono text-[11px]" title="Toggle Scanline Flicker">
+            CRT: OFF
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- MAIN PROFILE CARD -->
+      <section class="lg:col-span-8 dossier-frame bg-tactical-surface/95 rounded-md p-5 border border-tactical-border shadow-2xl relative corner-bracket space-y-6">
+        
+        <!-- Header: removed A-34, now clean SUBJECT identifier -->
+        <div class="flex justify-between items-center border-b border-tactical-border/60 pb-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-4 bg-tactical-accent animate-pulse"></div>
+            <span class="text-tactical-bright font-mono tracking-widest text-sm font-bold glow-purple">SUBJECT // K JAYANTH KARTHIKEYA</span>
+          </div>
+          <div class="flex items-center space-x-2 text-xs text-tactical-dim font-mono">
+            <div class="w-5 h-2.5 border border-tactical-bright flex items-center p-0.5">
+              <div class="w-full h-full bg-tactical-bright"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Section: Interactive Eye-Scan Canvas Viewport (Processor Mesh Block completely removed) -->
+        <div class="w-full border border-tactical-border/80 p-3 bg-tactical-bg/70 rounded relative group">
+          <div class="flex justify-between items-center mb-2 text-[11px] font-mono text-tactical-dim">
+            <span>SCAN_RETICLE // OCULAR SENSOR</span>
+            <div class="flex space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-tactical-accent"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-tactical-dim"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-tactical-dim"></span>
+            </div>
+          </div>
+
+          <!-- Canvas for Dithered Eye Mesh reacting to cursor -->
+          <div class="relative w-full h-56 sm:h-64 bg-[#0b0819] rounded border border-tactical-border/50 overflow-hidden flex items-center justify-center">
+            <canvas id="eyeScannerCanvas" class="w-full h-full block"></canvas>
+            <div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-2">
+              <div class="flex justify-between text-[9px] text-tactical-accent/80 font-mono">
+                <span>TARGET_LOCK: TRUE</span>
+                <span id="targetCoords">X:124 Y:489</span>
+              </div>
+              <div class="flex justify-between text-[9px] text-tactical-accent/80 font-mono">
+                <span>SPECTRAL: 94.2%</span>
+                <span>IRIS_SCAN: MATCH</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2 text-[10px] text-tactical-dim font-mono text-center tracking-wider">
+            MOVE CURSOR TO ALIGN NEURAL OPTICS
+          </div>
+        </div>
+
+        <!-- Identity Details & Biometric Data (Threat assessment line removed) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-t border-tactical-border/70 pt-4 text-xs font-mono">
+          
+          <!-- Left: Biometric Scan Fingerprint -->
+          <div class="md:col-span-3 border border-tactical-border/80 p-3 bg-tactical-bg/80 rounded flex flex-col items-center justify-center space-y-2">
+            <div class="w-16 h-20 border border-tactical-accent/40 rounded-full flex items-center justify-center relative overflow-hidden bg-tactical-panel/40">
+              <svg viewBox="0 0 100 120" class="w-12 h-16 text-tactical-bright opacity-85">
+                <path d="M 50,20 C 30,20 20,40 20,60 C 20,80 30,100 50,100 C 70,100 80,80 80,60 C 80,40 70,20 50,20 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3,2" />
+                <path d="M 50,30 C 37,30 30,45 30,60 C 30,75 37,90 50,90 C 63,90 70,75 70,60 C 70,45 63,30 50,30 Z" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M 50,42 C 43,42 40,50 40,60 C 40,70 43,78 50,78 C 57,78 60,70 60,60 C 60,50 57,42 50,42 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2,2" />
+              </svg>
+              <div class="bio-scan-bar absolute inset-x-0 h-1"></div>
+            </div>
+            <span class="text-[10px] text-tactical-bright tracking-wider font-bold">BIOMETRIC: AUTH</span>
+          </div>
+
+          <!-- Right: Key Specifications & Identity Table -->
+          <div class="md:col-span-9 space-y-2.5">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-tactical-border/40 pb-2">
+              <span class="text-tactical-dim">SUBJECT NAME:</span>
+              <span class="sm:col-span-2 text-tactical-bright font-bold tracking-wider glitch-hover">K JAYANTH KARTHIKEYA</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-tactical-border/40 pb-2">
+              <span class="text-tactical-dim">CLASSIFICATION:</span>
+              <span class="sm:col-span-2 text-tactical-text">FINAL YEAR STUDENT // ENGG</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-tactical-border/40 pb-2">
+              <span class="text-tactical-dim">PRIMARY FUNCTION:</span>
+              <span class="sm:col-span-2 text-tactical-accent font-semibold">ML & SOFTWARE ENGINEER</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-tactical-border/40 pb-2">
+              <span class="text-tactical-dim">COGNITIVE MOTTO:</span>
+              <span class="sm:col-span-2 text-tactical-bright">"TECH ENTHUSIAST & QUICK LEARNER"</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <span class="text-tactical-dim">CALLSIGN / ALIAS:</span>
+              <span class="sm:col-span-2 text-tactical-bright">hollow_purple <a href="https://www.codechef.com/users/hollow_purple" target="_blank" class="text-tactical-dim hover:text-tactical-accent underline ml-2">[CODECHEF VERIFIED]</a></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Sidebar: Communication Uplinks (Core Architecture Diagnostic completely removed) -->
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="dossier-frame bg-tactical-surface/95 rounded-md p-5 border border-tactical-border shadow-xl corner-bracket space-y-4">
+          <div class="flex items-center justify-between border-b border-tactical-border/60 pb-2">
+            <h3 class="text-sm font-mono font-bold text-tactical-bright glow-purple flex items-center space-x-2">
+              <span>📡</span>
+              <span>COMMUNICATION UPLINKS</span>
+            </h3>
+            <span class="text-[10px] text-tactical-accent font-mono">SECURE RELAY</span>
+          </div>
+
+          <p class="text-xs text-tactical-dim font-mono leading-relaxed">
+            Encrypted endpoints established for collaboration, intelligence exchange, and software engineering deployments.
+          </p>
+
+          <div class="space-y-2.5 font-mono text-xs">
+            <a href="https://github.com/Jays2k4" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-between p-2.5 bg-tactical-bg hover:bg-tactical-panel border border-tactical-border/80 hover:border-tactical-accent rounded text-tactical-bright transition group">
+              <div class="flex items-center space-x-2">
+                <span class="text-tactical-accent">▸</span>
+                <span>GITHUB REPOSITORY</span>
+              </div>
+              <span class="text-[10px] text-tactical-dim group-hover:text-tactical-bright">/Jays2k4 ↗</span>
+            </a>
+
+            <a href="https://www.linkedin.com/in/jayanth-karthikeya" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-between p-2.5 bg-tactical-bg hover:bg-tactical-panel border border-tactical-border/80 hover:border-tactical-accent rounded text-tactical-bright transition group">
+              <div class="flex items-center space-x-2">
+                <span class="text-tactical-accent">▸</span>
+                <span>LINKEDIN NETWORK</span>
+              </div>
+              <span class="text-[10px] text-tactical-dim group-hover:text-tactical-bright">/in/jayanth-karthikeya ↗</span>
+            </a>
+
+            <a href="https://www.codechef.com/users/hollow_purple" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-between p-2.5 bg-tactical-bg hover:bg-tactical-panel border border-tactical-border/80 hover:border-tactical-accent rounded text-tactical-bright transition group">
+              <div class="flex items-center space-x-2">
+                <span class="text-tactical-accent">▸</span>
+                <span>CODECHEF ARENA</span>
+              </div>
+              <span class="text-[10px] text-tactical-dim group-hover:text-tactical-bright">@hollow_purple ↗</span>
+            </a>
+
+            <!-- Resume (opens PDF in a new tab; keep Resume.pdf in the same folder as this file) -->
+            <a href="Resume.pdf" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center justify-between p-2.5 bg-tactical-bg hover:bg-tactical-panel border border-tactical-border/80 hover:border-tactical-accent rounded text-tactical-bright transition group">
+              <div class="flex items-center space-x-2">
+                <span class="text-tactical-accent">▸</span>
+                <span>RESUME</span>
+              </div>
+              <span class="text-[10px] text-tactical-dim group-hover:text-tactical-bright">/Resume.pdf ↗</span>
+            </a>
+
+            <!-- Email One-Click Copy & Direct Mailto -->
+            <div class="p-3 bg-tactical-bg border border-tactical-border/80 rounded space-y-2">
+              <div class="flex justify-between items-center text-[11px] text-tactical-dim">
+                <span>DIRECT DISPATCH:</span>
+                <span class="text-tactical-bright">ACTIVE MAIL</span>
+              </div>
+              <div class="text-tactical-bright font-mono text-xs break-all selection:bg-tactical-accent">
+                preferjayanth01@gmail.com
+              </div>
+              <div class="flex space-x-2 pt-1">
+                <button onclick="copyEmailToClipboard()" class="flex-1 py-1.5 px-2 bg-tactical-panel hover:bg-tactical-accent hover:text-tactical-bg border border-tactical-border text-tactical-bright rounded text-[11px] font-mono transition text-center font-bold">
+                  📋 COPY ADDRESS
+                </button>
+                <a href="mailto:preferjayanth01@gmail.com" class="py-1.5 px-3 bg-tactical-accent text-tactical-bg hover:bg-tactical-bright rounded text-[11px] font-mono transition font-bold flex items-center justify-center">
+                  DISPATCH ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- CAPABILITY MATRIX: Cleaned (Telemetry & Computer Vision removed, 18 libraries line removed, all glow normalized to theme purple/lavender) -->
+    <section class="dossier-frame bg-tactical-surface/90 rounded-md p-6 border border-tactical-border shadow-2xl corner-bracket space-y-6">
+      <div class="flex flex-wrap justify-between items-center border-b border-tactical-border/60 pb-3 gap-2">
+        <div>
+          <span class="text-xs text-tactical-dim font-mono">SPEC_SUBSYSTEM: MODULE_02</span>
+          <h2 class="text-lg md:text-xl font-bold font-mono tracking-wider text-tactical-bright glow-purple flex items-center space-x-2">
+            <span>⚡</span>
+            <span>CAPABILITY MATRIX // TECHNICAL DOMAINS</span>
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- Module 1: ML & Neural Networks (All tags use consistent purple/lavender) -->
+        <div class="border border-tactical-border/70 hover:border-tactical-accent bg-tactical-bg/70 p-4 rounded transition group">
+          <div class="flex items-center justify-between mb-3 text-xs font-mono">
+            <span class="text-tactical-accent font-bold">MOD_01 // MACHINE_LEARNING</span>
+            <span class="w-2 h-2 rounded-full bg-tactical-accent group-hover:animate-ping"></span>
+          </div>
+          <h4 class="text-tactical-bright font-bold font-mono text-sm mb-2">Machine Learning & Neural Tech</h4>
+          <p class="text-xs text-tactical-dim font-mono mb-3 leading-relaxed">
+            Neural network design, retrieval-augmented generation (RAG), attention transformers, and automated inference pipelines.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Neural Networks</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">RAG</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Transformers</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">PyTorch</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-accent border border-tactical-border">Hugging Face</span>
+          </div>
+        </div>
+
+        <!-- Module 2: Core Engineering & DSA -->
+        <div class="border border-tactical-border/70 hover:border-tactical-accent bg-tactical-bg/70 p-4 rounded transition group">
+          <div class="flex items-center justify-between mb-3 text-xs font-mono">
+            <span class="text-tactical-accent font-bold">MOD_02 // FOUNDATIONS</span>
+            <span class="w-2 h-2 rounded-full bg-tactical-accent group-hover:animate-ping"></span>
+          </div>
+          <h4 class="text-tactical-bright font-bold font-mono text-sm mb-2">Core Software Engineering</h4>
+          <p class="text-xs text-tactical-dim font-mono mb-3 leading-relaxed">
+            Rigorous algorithmic logic, object-oriented software patterns, time/space complexity optimization, and memory mechanics.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Data Structures & Algo</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">C Programming</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">OOP Java</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-accent border border-tactical-border">Python</span>
+          </div>
+        </div>
+
+        <!-- Module 3: Full-Stack & APIs -->
+        <div class="border border-tactical-border/70 hover:border-tactical-accent bg-tactical-bg/70 p-4 rounded transition group">
+          <div class="flex items-center justify-between mb-3 text-xs font-mono">
+            <span class="text-tactical-accent font-bold">MOD_03 // WEB_INTEGRATION</span>
+            <span class="w-2 h-2 rounded-full bg-tactical-bright group-hover:animate-ping"></span>
+          </div>
+          <h4 class="text-tactical-bright font-bold font-mono text-sm mb-2">Full-Stack & Distributed APIs</h4>
+          <p class="text-xs text-tactical-dim font-mono mb-3 leading-relaxed">
+            Responsive client architectures integrated with secure microservice backends, REST endpoints, and schema-free data stores.
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">React</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Node.js</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Express</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">Flask API</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-accent border border-tactical-border">MongoDB</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-tactical-panel text-tactical-bright border border-tactical-border">HTML5/CSS/JS</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- THE RECEIPTS: Both cards hover glow green, tags unified to theme purple -->
+    <section class="dossier-frame bg-tactical-surface/90 rounded-md p-6 border border-tactical-border shadow-2xl corner-bracket space-y-6">
+      <div class="flex flex-wrap justify-between items-center border-b border-tactical-border/60 pb-3 gap-2">
+        <div>
+          <span class="text-xs text-tactical-dim font-mono">SPEC_SUBSYSTEM: MODULE_03</span>
+          <h2 class="text-lg md:text-xl font-bold font-mono tracking-wider text-tactical-bright glow-purple flex items-center space-x-2">
+            <span>📂</span>
+            <span>THE RECEIPTS // DEPLOYED MISSIONS & ARCHITECTURES</span>
+          </h2>
+        </div>
+        <div class="text-xs text-tactical-dim font-mono">
+          STATUS: VERIFIED PRODUCTION RECORDS
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- PROJECT 1: Subscriber Churn Predictor -->
+        <article class="border border-tactical-border hover:border-tactical-cyan bg-tactical-panel/70 p-5 rounded-md flex flex-col justify-between space-y-4 transition duration-200 relative group">
+          <div class="absolute -top-2.5 right-4 bg-tactical-bg border border-tactical-accent px-2 py-0.5 rounded text-[10px] font-mono text-tactical-bright font-bold">
+            DEPLOYMENT // 01
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 bg-tactical-accent rounded-sm group-hover:bg-tactical-cyan transition"></span>
+              <h3 class="text-base md:text-lg font-bold font-mono text-tactical-bright group-hover:text-tactical-cyan group-hover:glow-cyan transition">
+                SUBSCRIBER CHURN PREDICTOR
+              </h3>
+            </div>
+            <div class="text-xs font-mono text-tactical-accent">
+              Predictive Business Intelligence & Retention Architecture
+            </div>
+            <p class="text-xs text-tactical-text font-mono leading-relaxed opacity-90">
+              Targeted retention engineering solution focused on helping business analysts model customer attrition patterns. Employs an Artificial Neural Network (ANN) trained on historical behavioral data to forecast probability of churn, empowering companies to recalibrate their service delivery, update content schemes, and preserve recurring revenue.
+            </p>
+
+            <div class="border-t border-tactical-border/40 pt-3">
+              <span class="text-[11px] text-tactical-dim font-mono block mb-1.5">STACK & COMPONENT SIGNATURES:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">Python</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-accent border border-tactical-border">ANN Deep Learning</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-text border border-tactical-border">NumPy</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-text border border-tactical-border">Pandas</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">Flask</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">MongoDB</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-text border border-tactical-border">HTML5/CSS/JS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-tactical-border/50 flex items-center justify-between">
+            <span class="text-[10px] font-mono text-tactical-dim">REPO: Jays2k4/Subscriber-Churn</span>
+            <a href="https://github.com/Jays2k4/Subscriber-Churn" target="_blank" rel="noopener noreferrer" 
+               class="px-3 py-1.5 bg-tactical-bg hover:bg-tactical-cyan hover:text-tactical-bg border border-tactical-border hover:border-tactical-cyan rounded font-mono text-xs text-tactical-bright transition font-bold flex items-center space-x-1">
+              <span>EXPLORE CODE</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 2: Adaptive Learning Path (ALP) - Hover glow green added -->
+        <article class="border border-tactical-border hover:border-tactical-cyan bg-tactical-panel/70 p-5 rounded-md flex flex-col justify-between space-y-4 transition duration-200 relative group">
+          <div class="absolute -top-2.5 right-4 bg-tactical-bg border border-tactical-accent px-2 py-0.5 rounded text-[10px] font-mono text-tactical-bright font-bold">
+            DEPLOYMENT // 02
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 bg-tactical-accent rounded-sm group-hover:bg-tactical-cyan transition"></span>
+              <h3 class="text-base md:text-lg font-bold font-mono text-tactical-bright group-hover:text-tactical-cyan group-hover:glow-cyan transition">
+                ADAPTIVE LEARNING PATH (ALP)
+              </h3>
+            </div>
+            <div class="text-xs font-mono text-tactical-accent">
+              Emotion-Adaptive Neuro-Pedagogy Platform
+            </div>
+            <p class="text-xs text-tactical-text font-mono leading-relaxed opacity-90">
+              Assistive, personalized educational platform created for children with learning disabilities. Integrates computer vision to safely monitor pupil facial expressions and affect during learning tasks. Under the calibrated supervision of licensed therapists, the engine automatically dynamically modulates content pacing, tactile interactivity, and visual stimulus to match the child's comfort level.
+            </p>
+
+            <div class="border-t border-tactical-border/40 pt-3">
+              <span class="text-[11px] text-tactical-dim font-mono block mb-1.5">STACK & COMPONENT SIGNATURES:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">React</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-accent border border-tactical-border">Mediapipe FaceMesh</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">Hugging Face</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-accent border border-tactical-border">PyTorch</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">Flask API</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-text border border-tactical-border">Node / Express</span>
+                <span class="text-[10px] font-mono bg-tactical-bg px-2 py-0.5 rounded text-tactical-bright border border-tactical-border">MongoDB</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-tactical-border/50 flex items-center justify-between">
+            <span class="text-[10px] font-mono text-tactical-dim">REPO: Jays2k4/ALP-Project</span>
+            <a href="https://github.com/Jays2k4/ALP-Project" target="_blank" rel="noopener noreferrer" 
+               class="px-3 py-1.5 bg-tactical-bg hover:bg-tactical-cyan hover:text-tactical-bg border border-tactical-border hover:border-tactical-cyan rounded font-mono text-xs text-tactical-bright transition font-bold flex items-center space-x-1">
+              <span>EXPLORE CODE</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Tactical REPL Console -->
+    <section class="dossier-frame bg-tactical-surface/95 rounded-md p-4 border border-tactical-border shadow-2xl corner-bracket space-y-3 font-mono">
+      <div class="flex justify-between items-center border-b border-tactical-border/50 pb-2">
+        <div class="flex items-center space-x-2 text-xs">
+          <span class="text-tactical-accent">▶</span>
+          <span class="text-tactical-bright font-bold">TACTICAL REPL CONSOLE // STDIN</span>
+          <span class="text-tactical-dim text-[10px] hidden sm:inline">(Try: help, skills, projects, contact, clear)</span>
+        </div>
+        <div class="text-[10px] text-tactical-dim">BASH v5.2-COMPAT</div>
+      </div>
+
+      <!-- Output Scroll Area -->
+      <div id="terminalOutput" class="h-32 overflow-y-auto bg-tactical-bg p-3 rounded border border-tactical-border/40 text-xs text-tactical-text space-y-1 font-mono">
+        <div class="text-tactical-dim">System initialized. Type <span class="text-tactical-bright font-bold">help</span> to display accessible commands.</div>
+      </div>
+
+      <!-- Input Bar -->
+      <form id="terminalForm" class="flex items-center space-x-2" onsubmit="handleCommand(event)">
+        <span class="text-tactical-accent font-bold text-sm">jk04@root:~$</span>
+        <input type="text" id="terminalInput" autocomplete="off" spellcheck="false" placeholder="enter directive..." 
+               class="flex-1 bg-tactical-bg text-tactical-bright px-3 py-1.5 text-xs rounded border border-tactical-border focus:border-tactical-accent focus:outline-none font-mono">
+        <button type="submit" class="px-4 py-1.5 bg-tactical-panel hover:bg-tactical-accent hover:text-tactical-bg text-tactical-bright text-xs rounded border border-tactical-border transition font-bold">
+          EXEC
+        </button>
+      </form>
+    </section>
+
+    <!-- Footer: Security classification line removed -->
+    <footer class="text-center py-6 text-xs text-tactical-dim font-mono space-y-2 border-t border-tactical-border/40">
+      <div class="flex justify-center items-center space-x-4">
+        <span>K JAYANTH KARTHIKEYA</span>
+        <span>•</span>
+        <span>HYDERABAD / GLOBAL</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       1. WEB AUDIO SYNTHESIZER
+       ========================================================================== */
+    let audioCtx = null;
+    let audioEnabled = true;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playBeep(freq = 600, duration = 0.05, type = 'sine') {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (err) {
+        console.warn("Audio Context init pending interaction", err);
+      }
+    }
+
+    /* Sound Effects Toggle */
+    const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+    const audioLabel = document.getElementById('audioLabel');
+    const audioIcon = document.getElementById('audioIcon');
+
+    toggleAudioBtn.addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      if (audioEnabled) {
+        audioLabel.textContent = 'AUDIO: ON';
+        audioIcon.textContent = '🔊';
+        playBeep(880, 0.08);
+      } else {
+        audioLabel.textContent = 'AUDIO: OFF';
+        audioIcon.textContent = '🔇';
+      }
+      showToast(`TACTICAL AUDIO: ${audioEnabled ? 'ENABLED' : 'MUTED'}`);
+    });
+
+    /* Attach click beeps to interactive buttons and anchors */
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => playBeep(900, 0.02, 'sine'));
+      el.addEventListener('click', () => playBeep(520, 0.04, 'square'));
+    });
+
+    /* CRT Toggle (Defaults to OFF) */
+    const crtOverlay = document.getElementById('crtOverlay');
+    const toggleCrtBtn = document.getElementById('toggleCrtBtn');
+    let crtActive = false;
+
+    toggleCrtBtn.addEventListener('click', () => {
+      crtActive = !crtActive;
+      if (crtActive) {
+        crtOverlay.style.display = 'block';
+        toggleCrtBtn.textContent = 'CRT: ON';
+      } else {
+        crtOverlay.style.display = 'none';
+        toggleCrtBtn.textContent = 'CRT: OFF';
+      }
+      showToast(`CRT EMULATION: ${crtActive ? 'ACTIVE' : 'DISABLED'}`);
+    });
+
+    /* Indian Standard Time (IST) Real-time Clock */
+    function updateClock() {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Kolkata',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const istString = new Intl.DateTimeFormat('en-GB', options).format(now);
+      document.getElementById('liveClock').textContent = `${istString} IST`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const label = document.getElementById('toastMsg');
+      label.textContent = msg;
+      toast.classList.remove('translate-y-[-100px]', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-100px]', 'opacity-0');
+      }, 2500);
+    }
+
+    function copyEmailToClipboard() {
+      const email = 'preferjayanth01@gmail.com';
+      const tempInput = document.createElement('input');
+      tempInput.value = email;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast('EMAIL COPIED TO CLIPBOARD');
+        playBeep(1200, 0.08);
+      } catch (e) {
+        showToast('PLEASE COPY: ' + email);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    /* Ocular Scanner Canvas Simulation */
+    const eyeCanvas = document.getElementById('eyeScannerCanvas');
+    const eyeCtx = eyeCanvas.getContext('2d');
+    let targetCoords = document.getElementById('targetCoords');
+    let mouse = { x: 0.5, y: 0.5 };
+
+    function resizeEyeCanvas() {
+      eyeCanvas.width = eyeCanvas.clientWidth;
+      eyeCanvas.height = eyeCanvas.clientHeight;
+    }
+    window.addEventListener('resize', resizeEyeCanvas);
+    resizeEyeCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+      const rect = eyeCanvas.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+      mouse.x += (x - mouse.x) * 0.15;
+      mouse.y += (y - mouse.y) * 0.15;
+      if (targetCoords) {
+        targetCoords.textContent = `X:${Math.round(e.clientX)} Y:${Math.round(e.clientY)}`;
+      }
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = eyeCanvas.getBoundingClientRect();
+        mouse.x = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+        mouse.y = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height));
+      }
+    });
+
+    let frame = 0;
+    function renderEyeScanner() {
+      frame++;
+      const w = eyeCanvas.width;
+      const h = eyeCanvas.height;
+      if (!w || !h) {
+        requestAnimationFrame(renderEyeScanner);
+        return;
+      }
+
+      eyeCtx.fillStyle = '#0b0819';
+      eyeCtx.fillRect(0, 0, w, h);
+
+      // Same cursor-follow offsets as before, shared by both eyes
+      const offX = (mouse.x - 0.5) * 50;
+      const offY = (mouse.y - 0.5) * 35;
+      const half = w * 0.2; // half-width of each eye contour
+      const eyes = [w * 0.27, w * 0.73].map(ox => ({
+        ox: ox,
+        cx: ox + offX,
+        cy: h * 0.5 + offY
+      }));
+
+      const pupilSize = 13 + Math.sin(frame * 0.05) * 2.5;
+
+      eyes.forEach(eye => {
+        // Outer eye contour
+        eyeCtx.strokeStyle = 'rgba(104, 89, 164, 0.7)';
+        eyeCtx.lineWidth = 1.5;
+        eyeCtx.beginPath();
+        eyeCtx.moveTo(eye.ox - half, h * 0.5);
+        eyeCtx.quadraticCurveTo(eye.ox, h * 0.15, eye.ox + half, h * 0.5);
+        eyeCtx.quadraticCurveTo(eye.ox, h * 0.85, eye.ox - half, h * 0.5);
+        eyeCtx.stroke();
+
+        // Iris outline
+        eyeCtx.strokeStyle = '#c7baff';
+        eyeCtx.beginPath();
+        eyeCtx.arc(eye.cx, eye.cy, 38, 0, Math.PI * 2);
+        eyeCtx.stroke();
+
+        // Pupil with reactive pulsation
+        eyeCtx.fillStyle = '#120f24';
+        eyeCtx.beginPath();
+        eyeCtx.arc(eye.cx, eye.cy, pupilSize, 0, Math.PI * 2);
+        eyeCtx.fill();
+        eyeCtx.strokeStyle = '#a994ff';
+        eyeCtx.stroke();
+      });
+
+      // Dithered particles (around both eyes)
+      const dotStep = 7;
+      for (let x = 10; x < w - 10; x += dotStep) {
+        for (let y = 10; y < h - 10; y += dotStep) {
+          let nearest = Infinity;
+          eyes.forEach(eye => {
+            const dx = x - eye.cx;
+            const dy = y - eye.cy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < nearest) nearest = dist;
+            if (dist < 52 && dist > 14) {
+              const noise = Math.sin(x * 12.9898 + y * 78.233 + frame * 0.08);
+              if (noise > 0.05) {
+                eyeCtx.fillStyle = (dist < 28) ? '#c7baff' : '#9279fe';
+                eyeCtx.fillRect(x, y, 1.5, 1.5);
+              }
+            }
+          });
+          if (nearest >= 52 && nearest < 90 && Math.random() > 0.94) {
+            eyeCtx.fillStyle = 'rgba(169, 148, 255, 0.4)';
+            eyeCtx.fillRect(x, y, 1, 1);
+          }
+        }
+      }
+
+      // Scanner Crosshairs
+      eyeCtx.strokeStyle = 'rgba(169, 148, 255, 0.45)';
+      eyeCtx.lineWidth = 1;
+      eyes.forEach(eye => {
+        eyeCtx.beginPath();
+        eyeCtx.moveTo(eye.cx - 24, eye.cy);
+        eyeCtx.lineTo(eye.cx + 24, eye.cy);
+        eyeCtx.moveTo(eye.cx, eye.cy - 24);
+        eyeCtx.lineTo(eye.cx, eye.cy + 24);
+        eyeCtx.stroke();
+      });
+
+      requestAnimationFrame(renderEyeScanner);
+    }
+    renderEyeScanner();
+
+    /* Terminal REPL Logic */
+    const terminalOutput = document.getElementById('terminalOutput');
+    const terminalInput = document.getElementById('terminalInput');
+
+    function appendTerminalLine(text, isError = false, isCommand = false) {
+      const line = document.createElement('div');
+      if (isCommand) {
+        line.innerHTML = `<span class="text-tactical-accent font-bold">jk04@root:~$</span> <span class="text-tactical-bright font-bold">${escapeHtml(text)}</span>`;
+      } else if (isError) {
+        line.innerHTML = `<span class="text-tactical-alert">ERR:</span> ${text}`;
+      } else {
+        line.innerHTML = text;
+      }
+      terminalOutput.appendChild(line);
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/[&<>"']/g, function(s) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[s];
+      });
+    }
+
+    function handleCommand(e) {
+      e.preventDefault();
+      const rawCmd = terminalInput.value.trim();
+      if (!rawCmd) return;
+
+      appendTerminalLine(rawCmd, false, true);
+      playBeep(700, 0.03, 'square');
+      terminalInput.value = '';
+
+      const cmd = rawCmd.toLowerCase();
+
+      switch (cmd) {
+        case 'help':
+          appendTerminalLine(`<span class="text-tactical-bright">AVAILABLE DIRECTIVES:</span><br>` +
+            `&nbsp;&nbsp;<strong class="text-tactical-accent">skills</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Print indexed core competencies<br>` +
+            `&nbsp;&nbsp;<strong class="text-tactical-accent">projects</strong>&nbsp;&nbsp;&nbsp;&nbsp;- List production verified deployments<br>` +
+            `&nbsp;&nbsp;<strong class="text-tactical-accent">contact</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Print comm channels & email<br>` +
+            `&nbsp;&nbsp;<strong class="text-tactical-accent">alias</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Reveal CodeChef callsign<br>` +
+            `&nbsp;&nbsp;<strong class="text-tactical-accent">clear</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Flush buffer memory`);
+          break;
+
+        case 'skills':
+          appendTerminalLine(`<span class="text-tactical-bright">TECHNICAL ARSENAL:</span><br>` +
+            `• Languages: C, Java (OOP), Python, JavaScript<br>` +
+            `• Core: Data Structures & Algorithms, Clean Architecture<br>` +
+            `• AI/ML: Neural Networks, RAG, Transformers, PyTorch, Hugging Face<br>` +
+            `• Web & DB: React, Node, Express, Flask API, MongoDB, HTML5/CSS`);
+          break;
+
+        case 'projects':
+          appendTerminalLine(`<span class="text-tactical-bright">REGISTERED REPOSITORIES:</span><br>` +
+            `1. <a href="https://github.com/Jays2k4/Subscriber-Churn" target="_blank" class="text-tactical-accent underline font-bold">Subscriber-Churn</a>: Artificial Neural Net predicting customer attrition.<br>` +
+            `2. <a href="https://github.com/Jays2k4/ALP-Project" target="_blank" class="text-tactical-accent underline font-bold">ALP-Project</a>: Adaptive Learning Path for kids with learning disabilities.`);
+          break;
+
+        case 'contact':
+          appendTerminalLine(`<span class="text-tactical-bright">ACTIVE UPLINKS:</span><br>` +
+            `• Email: <span class="text-tactical-accent">preferjayanth01@gmail.com</span><br>` +
+            `• GitHub: <a href="https://github.com/Jays2k4" target="_blank" class="text-tactical-accent underline">github.com/Jays2k4</a><br>` +
+            `• LinkedIn: <a href="https://www.linkedin.com/in/jayanth-karthikeya" target="_blank" class="text-tactical-accent underline">linkedin.com/in/jayanth-karthikeya</a>`);
+          break;
+
+        case 'alias':
+          appendTerminalLine(`CALLSIGN: <span class="text-tactical-bright font-bold">hollow_purple</span> // Rank: Active on CodeChef.`);
+          break;
+
+        case 'clear':
+          terminalOutput.innerHTML = '';
+          break;
+
+        default:
+          appendTerminalLine(`Unknown directive: "${escapeHtml(rawCmd)}". Type <span class="text-tactical-accent font-bold">help</span> for directives.`, true);
+      }
+    }
+  </script>
+</body>
+</html>
